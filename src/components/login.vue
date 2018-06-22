@@ -51,7 +51,10 @@
         }else{
             if (this.tel.length == 11 && (/^1[3|4|5|6|8|7|9]\d{9}$/).test(this.tel)){
                 //手机号码输入正确
-                this.showMsgbox('手机号输入正确');
+                // this.showMsgbox('手机号输入正确');
+                this.$router.push({
+                    name: "hello"
+                });
             }else{
                 //手机号码格式错误
                 this.showMsgbox('请输入正确的手机号');
