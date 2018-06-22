@@ -6,7 +6,7 @@ import App from './App'
 import router from './router'
 import 'lib-flexible'
 
-import emComponent from './plugin/index'
+import emComponent from './plugin/popUp/index'
 Vue.use(emComponent)
 
 Vue.config.productionTip = false

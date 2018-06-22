@@ -8,9 +8,6 @@
       </a>
       <div class="submit" v-bind:class="{orange : isEntryTel}" id="submit" @click.stop="submitPhone()">下一步</div>
     </div>
-    <div>
-      <label id="msgbox" @click.stop="showMsgbox('显示')">点击我显示msgbox</label>
-    </div>
   </div>
 </template>
 
@@ -48,8 +45,17 @@
       },
       submitPhone(){
         //点击下一步，提交手机号以获取验证码
-        if (this.tel.length != 11){
-          this.showMsgbox('手机号为空');
+        if (this.tel.length == 0){
+          //  手机号码为空
+          this.showMsgbox('手机号码不能为空');
+        }else{
+            if (this.tel.length == 11 && (/^1[3|4|5|6|8|7|9]\d{9}$/).test(this.tel)){
+                //手机号码输入正确
+                this.showMsgbox('手机号输入正确');
+            }else{
+                //手机号码格式错误
+                this.showMsgbox('请输入正确的手机号');
+            }
         }
       }
     }

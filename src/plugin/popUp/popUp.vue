@@ -42,7 +42,6 @@
         var obj_class = obj.className,
           blank = (obj_class != '') ? ' ' : '';
         var added = obj_class + blank + cls;
-        that.showBg = true;
         obj.className = added;
         //弹框显示1.5s
         setTimeout(function (){
