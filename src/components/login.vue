@@ -1,7 +1,7 @@
 <template>
   <div class="login-wraper">
     <div class="login-main">
-      <input type="tel" maxlength="11" placeholder="请输入手机号" v-model="tel" class="telEntry" @change="telChange()">
+      <input type="tel" maxlength="11" placeholder="请输入下单时填写的手机号" v-model="tel" class="telEntry" @change="telChange()">
       <hr>
       <a href="javascript:void(0);" id="clear" class="clear" @click.stop="clearTelphone()">
         <img src="../assets/img/clear.png" alt="清空输入手机号">
@@ -51,8 +51,10 @@
         }else{
             if (this.tel.length == 11 && (/^1[3|4|5|6|8|7|9]\d{9}$/).test(this.tel)){
                 //手机号码输入正确
+
                 // this.showMsgbox('手机号输入正确');
-                this.$router.push({
+                this.$router.replace({
+                    //重定向
                     name: "hello"
                 });
             }else{
@@ -83,17 +85,7 @@
     -webkit-user-modify:read-write-plaintext-only;
     outline:0;
   }
-  h1, h2 {
-    font-weight: normal;
-  }
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  li {
-    display: inline-block;
-    margin: 0 10px;
-  }
+
   a {
     color: #42b983;
   }
@@ -116,7 +108,7 @@
     caret-color:rgb(241,119,46);
     width: 400px;
     height: 60px;
-    font-size: 40px;
+    font-size: 30px;
     line-height: 60px;
     text-align: center;
   }
