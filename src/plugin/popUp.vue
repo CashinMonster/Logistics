@@ -1,14 +1,10 @@
 <template>
   <transition name="msgbox">
     <div v-if="show" class="msgbox-container" :class="className">
-      <header>{{title}}</header>
+      <div class="msgbox-bg"></div>
       <div class="content-body">
-        <div>弹出内容可以嵌入html标签</div>
+        <div>{{content}}</div>
       </div>
-      <footer>
-        <a v-if="cancel" href="javascript:;" @click="cancelBtn" class="button">{{cancel}}</a>
-        <a href="javascript:;" @click="successBtn" class="button">{{confirm}}</a>
-      </footer>
     </div>
   </transition>
 </template>
@@ -16,11 +12,8 @@
   export default {
     data () {
       return {
-        show: false,
-        title: '提示',
-        content: '',
-        confirm: '确定',
-        cancel:'',
+        show: false,    //为true时弹框弹出，false弹框消失
+        content: '',    //弹框信息内容
         className:''
       }
     },
@@ -43,17 +36,18 @@
       }
     },
     methods: {
-      successBtn () {
-        this.show = false;
-      },
-      cancelBtn () {
-        this.show = false;
-      },
+
       addClass(obj, cls){
+        var that = this;
         var obj_class = obj.className,
           blank = (obj_class != '') ? ' ' : '';
         var added = obj_class + blank + cls;
+        that.showBg = true;
         obj.className = added;
+        //弹框显示1.5s
+        setTimeout(function (){
+          that.show = false;   //弹框消失
+        },1500);
       },
       removeClass(obj, cls){
         var obj_class = ' '+obj.className+' ';
@@ -79,66 +73,32 @@
 <style lang="scss" scoped>
   .msgbox-container{
     position: fixed;
-    top:50%;
+    top:500px;
     left:50%;
-    width: 90%;
-    background: #fff;
-    color: #555;
-    border-radius: 0.8rem;
+    width: 300px;
+    min-height: 100px;
+    padding: 40px;
+    background: rgba(0,0,0,.6);
+    color: white;
+    border-radius: 20px;
     transform:translate(-50%,-50%) scale(1, 1);
-    header{
-      margin: 0;
-      padding: 1.2rem 0;
-      text-align: center;
-      color: #333;
-      height: 2rem;
-      line-height: 2rem;
-      font-size: 1.7rem;
-      border-radius: 0.8rem 0.8rem 0 0;
-      background: #fff;
-      border-width: 0;
-      border-bottom: 1px solid #ccc;
+    .msgbox-bg{
+      width: 800%;
+      height: 800%;
+      position: fixed;
+      top: -300%;
+      left: -300%;
     }
     .content-body{
-      font-size: 1.5rem;
-      margin: 2rem 1rem;
-      line-height: 2;
-      max-height: 20rem;
+      font-size: 30px;
+      margin: 20px 10px;
+      line-height: 40px;
       overflow-y: auto;
-      color: #666;
+      color: white;
       div{
-        padding: 0 1rem;
-        text-align: justify;
+        /*padding: 0 1rem;*/
+        text-align: center;
         word-break: break-all;
-      }
-    }
-    footer {
-      width: 100%;
-      text-align: center;
-      display: block !important;
-      border-width: 0;
-      border-top: 1px solid #ccc;
-      overflow: hidden;
-      background: transparent;
-      border-radius: 0 0 0.8rem 0.8rem;
-      .button{
-        float: left;
-        padding: 1rem 0;
-        width: 50%;
-        color: #999;
-        box-sizing: border-box;
-        line-height: 3rem;
-        font-size: 1.7rem;
-        background: #f7f7f7;
-        border-right: 1px solid #D5D7D6;
-        text-decoration: none;
-        -webkit-tap-highlight-color: transparent;
-      }
-      .button:first-child:nth-last-child(1) {
-        width: 100%;
-      }
-      .button:first-child:nth-last-child(2) ~ .button {
-        width: 50%;
       }
     }
   }

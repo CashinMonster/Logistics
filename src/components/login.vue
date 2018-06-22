@@ -1,7 +1,5 @@
 <template>
   <div class="login-wraper">
-    <!--<h1>{{ msg }}</h1>-->
-    <!--<h2>Essential Links</h2>-->
     <div class="login-main">
       <input type="tel" maxlength="11" placeholder="请输入手机号" v-model="tel" class="telEntry" @change="telChange()">
       <hr>
@@ -11,10 +9,9 @@
       <div class="submit" v-bind:class="{orange : isEntryTel}" id="submit" @click.stop="submitPhone()">下一步</div>
     </div>
     <div>
-      <label id="msgbox" @click.stop="showMsgbox">点击我显示msgbox</label>
+      <label id="msgbox" @click.stop="showMsgbox('显示')">点击我显示msgbox</label>
     </div>
   </div>
-
 </template>
 
 
@@ -29,32 +26,31 @@
       }
     },
     methods: {
+      showMsgbox(msg){
+        //弹框函数
+        this.$msgbox({
+          content:msg,
+          className:'pop-custom'
+        });
+      },
       clearTelphone(){
+        //清空输入的手机号
         if (this.tel){
           this.tel = "";
           this.isEntryTel = false;
         }
       },
       telChange(){
+        //判断手机号个数
         if (this.tel.length == 11){
           this.isEntryTel = true;
         }
       },
       submitPhone(){
-
-      },
-      showMsgbox(){
-        this.$msgbox({
-          title:'温馨提示',
-          cancel:'取消',
-          content:'这里是消息弹出内容',
-          confirm:'确定按钮',
-          className:'pop-custom'
-        }).then(()=>{
-          console.log("我点击了确定按钮")
-        }).catch((err)=>{
-          console.log("error");
-        })
+        //点击下一步，提交手机号以获取验证码
+        if (this.tel.length != 11){
+          this.showMsgbox('手机号为空');
+        }
       }
     }
   }
@@ -68,7 +64,11 @@
     border: 0;
     -webkit-tap-highlight-color:transparent;
   }
-
+  body,html{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
   input{
     -webkit-tap-highlight-color:transparent;
     -webkit-user-modify:read-write-plaintext-only;
