@@ -1,7 +1,8 @@
+
 <template>
   <div class="login-wraper">
     <div class="login-main">
-      <input type="tel" maxlength="11" placeholder="请输入下单时填写的手机号" v-model="tel" class="telEntry" @change="telChange()">
+      <input type="tel" maxlength="11" placeholder="请输入下单时填写的手机号" v-model="tel" class="telEntry" @input="telChange()">
       <hr>
       <a href="javascript:void(0);" id="clear" class="clear" @click.stop="clearTelphone()">
         <img src="../assets/img/clear.png" alt="清空输入手机号">
@@ -22,6 +23,12 @@
         isEntryTel: false
       }
     },
+      // beforeCreate(){
+      //     document.title = "登录";
+      // },
+      // destroyed(){
+      //     document.title = ""
+      // },
     methods: {
       showMsgbox(msg){
         //弹框函数
@@ -40,42 +47,61 @@
       telChange(){
         //判断手机号个数
         if (this.tel.length == 11){
-          this.isEntryTel = true;
+            this.isEntryTel = true;
+        }else{
+            this.isEntryTel = false;
         }
+      },
+      postPhone(){
+          if (this.tel.length == 0){
+              //  手机号码为空
+              this.showMsgbox('请输入下单时填写的手机号');
+          }else{
+              if (this.tel.length == 11 && (/^1[3|4|5|6|8|7|9]\d{9}$/).test(this.tel)){
+                  //手机号码输入正确
+                  let data = {
+                      tel: this.tel
+                  };
+                  this.$http.getAxio(process.env.API_HOST+this.$http.urlHead+'Transport/telVerify', 'post', this.$qs.stringify(data)).then(res => {
+
+                      if (res.status == 1){
+                          //记录电话号码的sessionstorage
+                          sessionStorage.setItem("tel", this.tel);
+                          this.$router.replace({
+                              //重定向
+                              name: "identifyCode",
+                              params: {
+                                  tel: this.tel
+                              }
+                          });
+                      }else{
+                          this.showMsgbox(res.msg);
+                      }
+                  });
+              }else{
+                  //手机号码格式错误
+                  this.showMsgbox('请输入正确的手机号');
+              }
+          }
       },
       submitPhone(){
         //点击下一步，提交手机号以获取验证码
-          let data = {
-              tel: this.tel
-          };
-        if (this.tel.length == 0){
-          //  手机号码为空
-          this.showMsgbox('手机号码不能为空');
-        }else{
-            if (this.tel.length == 11 && (/^1[3|4|5|6|8|7|9]\d{9}$/).test(this.tel)){
-                //手机号码输入正确
-                this.$http.getAxio(process.env.API_HOST+this.$ajax.urlHead+'Transport/telVerify/tel/' + this.tel, 'get', data).then(res => {
-
-                    if (res.status == 1){
-                        //记录电话号码的sessionstorage
-                        sessionStorage.setItem("tel", this.tel);
-                        // this.showMsgbox('手机号输入正确');
-                        this.$router.replace({
-                            //重定向
-                            name: "identifyCode",
-                            params: {
-                                tel: this.tel
-                            }
-                        });
-                    }else{
-                        this.showMsgbox(res.msg);
-                    }
-                });
-            }else{
-                //手机号码格式错误
-                this.showMsgbox('请输入正确的手机号');
-            }
-        }
+          if (sessionStorage.getItem('count')){
+              if (sessionStorage.getItem('count') != 0){
+                  if (this.tel.length == 0){
+                      //  手机号码为空
+                      this.showMsgbox('手机号码不能为空');
+                  }else{
+                      let second = sessionStorage.getItem('count');
+                      this.showMsgbox('请等'+ second +'秒后再试');
+                  }
+              }else{
+                  sessionStorage.removeItem('count');
+                  this.postPhone();
+              }
+          }else{
+              this.postPhone();
+          }
       }
     }
   }

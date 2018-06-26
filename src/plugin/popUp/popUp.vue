@@ -81,6 +81,7 @@
     color: white;
     border-radius: 20px;
     transform:translate(-50%,-50%) scale(1, 1);
+      z-index: 99;
     .msgbox-bg{
       width: 800%;
       height: 800%;

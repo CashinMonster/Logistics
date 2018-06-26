@@ -4,13 +4,15 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import 'lib-flexible'
+import 'lib-flexible'  //移动端适配（直接用px为单位就行，基于页面宽度为750px）
+import qs from 'qs'  //qs 解决post请求后端接收不到的问题
+import emComponent from './plugin/popUp/index'  //自定义的弹框插件
 
-import emComponent from './plugin/popUp/index'
 Vue.use(emComponent)
+Vue.use(require('vue-wechat-title'))  //动态更改title
 
 Vue.config.productionTip = false
-
+Vue.prototype.$qs = qs
 
 /* eslint-disable no-new */
 new Vue({
@@ -21,13 +23,6 @@ new Vue({
 })
 
 
-router.beforeEach((to, from, next) => {
-    /* 路由发生变化修改页面title */
-    if (to.meta.title) {
-        document.title = to.meta.title
-    }
-    next()
-})
 
 
 
