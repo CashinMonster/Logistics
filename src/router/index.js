@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import login from '@/components/login'
-import hello from '@/components/hello'
+import identifyCode from '@/components/identifyCode'
+import http from '../components/ajax';  //工具
 
 Vue.use(Router)
-
+Vue.prototype.$http = http
 export default new Router({
   routes: [
     {
@@ -16,9 +17,9 @@ export default new Router({
       }
     },
       {
-          path: '/hello',
-          name: 'hello',
-          component: hello,
+          path: '/identifyCode',
+          name: 'identifyCode',
+          component: identifyCode,
           meta: {
               title: '验证码'
           }

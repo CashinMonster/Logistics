@@ -45,17 +45,31 @@
       },
       submitPhone(){
         //点击下一步，提交手机号以获取验证码
+          let data = {
+              tel: this.tel
+          };
         if (this.tel.length == 0){
           //  手机号码为空
           this.showMsgbox('手机号码不能为空');
         }else{
             if (this.tel.length == 11 && (/^1[3|4|5|6|8|7|9]\d{9}$/).test(this.tel)){
                 //手机号码输入正确
+                this.$http.getAxio(process.env.API_HOST+this.$ajax.urlHead+'Transport/telVerify/tel/' + this.tel, 'get', data).then(res => {
 
-                // this.showMsgbox('手机号输入正确');
-                this.$router.replace({
-                    //重定向
-                    name: "hello"
+                    if (res.status == 1){
+                        //记录电话号码的sessionstorage
+                        sessionStorage.setItem("tel", this.tel);
+                        // this.showMsgbox('手机号输入正确');
+                        this.$router.replace({
+                            //重定向
+                            name: "identifyCode",
+                            params: {
+                                tel: this.tel
+                            }
+                        });
+                    }else{
+                        this.showMsgbox(res.msg);
+                    }
                 });
             }else{
                 //手机号码格式错误
