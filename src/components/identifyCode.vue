@@ -4,7 +4,7 @@
         <p>
             已发送验证码至{{ tel }}
         </p>
-        <router-link to="/">更换手机号</router-link>
+        <router-link to="/login">更换手机号</router-link>
         <div id="yzm-wraper">
             <div class="ipt-box-nick mb15-nick">
                 <input type="tel" maxlength="4" oncopy="return false" v-model="code" onpaste="return false" class="ipt-real-nick" @input="inputChange" />
@@ -34,6 +34,9 @@
 
     export default {
         name: "identifyCode",
+        metaInfo: {
+            title: '验证码'
+        },
         data (){
             return {
                 tel: '',  //验证的手机号
@@ -44,12 +47,6 @@
                 loadBol: false,  //是否加载完
             }
         },
-        // beforeCreate(){
-        //     document.title = "验证码";
-        // },
-        // destroyed(){
-        //     document.title = ""
-        // },
         mounted (){
             let routerParams = this.$route.params.tel;   //login页传递过来的参数
             let sessionTel = sessionStorage.getItem('tel');   //login页记录的sessionStorage

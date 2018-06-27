@@ -17,6 +17,9 @@
 
   export default {
     name: 'login',
+      metaInfo: {
+          title: '登录'
+      },
     data () {
       return {
         tel:'',
