@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
         '/api': {
-            target: 'http://192.168.1.60',//设置你调用的接口域名和端口号
+            target: 'http://192.168.1.40',//设置你调用的接口域名和端口号
 
             changeOrigin: true,     //跨域
 
@@ -32,7 +32,7 @@ module.exports = {
     },
 
     // Various Dev Server settings
-    host: '192.168.1.55', // can be overwritten by process.env.HOST
+    host: '192.168.1.57', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
@@ -62,8 +62,8 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
-
+    assetsPublicPath: './',  //服务器
+      // assetsPublicPath: '/',  //本地
     /**
      * Source Maps
      */

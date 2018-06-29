@@ -1,5 +1,6 @@
 import axios from 'axios';  //axios
-var urlHead="/wxzspfse/trunk/index.php/Home/";   //IP访问
+// var urlHead = "/wxzspfse/trunk/index.php/Home/";   //本地访问
+var urlHead="/wxzspfse/index.php/Home/";   //服务器访问
 
 export default {
     getAxio(url,method,data){

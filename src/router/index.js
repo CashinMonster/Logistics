@@ -3,6 +3,8 @@ import Router from 'vue-router'
 import login from '@/components/login'
 import identifyCode from '@/components/identifyCode'
 import payList from '@/components/payList'
+import detailInfo from '@/components/detailInfo'
+
 import http from '../http/http'  //工具
 
 Vue.use(Router)
@@ -24,6 +26,11 @@ export default new Router({
           path: '/identifyCode',
           name: 'identifyCode',
           component: identifyCode
+      },
+      {
+          path: '/detailInfo',
+          name: 'detailInfo',
+          component: detailInfo
       },
 
   ]

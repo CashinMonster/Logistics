@@ -29,9 +29,6 @@
 </template>
 
 <script>
-
-
-
     export default {
         name: "identifyCode",
         metaInfo: {
@@ -107,7 +104,7 @@
 
                             if (res.status == 1){
                                 console.log('success');
-                                this.$router.replace({
+                                this.$router.push({
                                     //重定向
                                     name: "payList",
                                     params: {
@@ -126,30 +123,60 @@
                 }
             },
             countDown(){
-                let TIME_COUNT = null;
-                if (sessionStorage.getItem('count')){
-                    if (sessionStorage.getItem('count') == 0){
-                        this.resendBol = true;
-                    }else{
-                        TIME_COUNT = sessionStorage.getItem('count');
-                    }
-                }else{
-                    TIME_COUNT = 60;
-                }
-                if (!this.timer) {
-                    this.count = TIME_COUNT;
+                // let TIME_COUNT = null;
+                // if (sessionStorage.getItem('count')){
+                //     if (sessionStorage.getItem('count') == 0){
+                //         this.resendBol = true;
+                //     }else{
+                //         TIME_COUNT = sessionStorage.getItem('count');
+                //     }
+                // }else{
+                //     TIME_COUNT = 60;
+                // }
+                // if (!this.timer) {
+                //     this.count = TIME_COUNT;
+                //
+                //     this.timer = setInterval(() => {
+                //         if (this.count > 0 && this.count <= 60) {
+                //             this.resendBol = false;
+                //             this.count--;
+                //             sessionStorage.setItem('count',this.count);
+                //         } else {
+                //             this.resendBol = true;
+                //             clearInterval(this.timer);
+                //             this.timer = null;
+                //         }
+                //     }, 1000);
+                // }
 
-                    this.timer = setInterval(() => {
-                        if (this.count > 0 && this.count <= 60) {
-                            this.resendBol = false;
-                            this.count--;
-                            sessionStorage.setItem('count',this.count);
-                        } else {
+                let TIME_COUNT = new Date().getTime();//时间戳
+                if (!localStorage.getItem("TIME_COUNT")){
+                    localStorage.setItem("TIME_COUNT", TIME_COUNT);
+                    this.countDown();
+                }else{
+                    let count = TIME_COUNT - parseInt(localStorage.getItem("TIME_COUNT"), 10);
+                    count = parseInt(count / 1000); //转换成秒数
+                    console.log(count);
+                    if (count < 60){
+                        if (!this.timer) {
+                            count = parseInt(count, 10);
+                            this.count = 60 - count;
+                            this.timer = setInterval( () => {
+                                if (this.count > 0 && this.count <= 60) {
+                                    this.resendBol = false;
+                                    this.count--;
+                                } else {
+                                    this.resendBol = true;
+                                    clearInterval(this.timer);
+                                    this.timer = null;
+                                }
+                            }, 1000);
+                        }else{
                             this.resendBol = true;
-                            clearInterval(this.timer);
-                            this.timer = null;
                         }
-                    }, 1000);
+                    }else{
+                        this.resendBol = true;
+                    }
                 }
             },
             getCode(){
@@ -168,7 +195,8 @@
                             if (res.status == 1){
                                 //记录电话号码的sessionstorage
                                 sessionStorage.setItem("tel", this.tel);
-                                sessionStorage.setItem('count',60);
+                                localStorage.removeItem('TIME_COUNT');
+                                console.log('111');
                                 this.countDown();
                                 this.resendBol = false;
                             }else{
@@ -195,7 +223,7 @@
     .identify-wraper{
         width: 600px;
         margin-left: 75px;
-        margin-top: 300px;
+        margin-top: 360px;
         /*border: 1px solid red;*/
         position: relative;
         p{
