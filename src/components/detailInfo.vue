@@ -6,8 +6,8 @@
             </div>
             <div class="header-right">
                 <p>
-                    <span>{{name}}</span>
-                    <span class="tel">&nbsp;&nbsp;&nbsp;{{tel}}</span>
+                    <span v-if="name != ''">{{name}}</span>
+                    <span class="tel" v-if="tel != ''">&nbsp;&nbsp;&nbsp;{{tel}}</span>
                 </p>
                 <p>{{addr}}</p>
             </div>
@@ -40,25 +40,43 @@
                 name: '',
                 addr: '',
                 transportLists: [],
-                loading: false
+                loading: false,
+                orderId: null
             }
         },
         mounted(){
-            let orderId = this.$route.params.orderId;
+            if (sessionStorage.getItem('orderId')){
+                this.orderId = sessionStorage.getItem('orderId');
+            }else{
+                this.orderId = this.$route.params.orderId;
+                sessionStorage.setItem('orderId',this.$route.params.orderId);
+            }
+
             let data = {
-                orderId: orderId
+                orderId: this.orderId
             };
             this.$http.getAxio(process.env.API_HOST+this.$http.urlHead+'Transport/detailInfo', 'POST', this.$qs.stringify(data)).then(res => {
                 console.log(res.status)
                 if (res.status == 1){
-                    console.log('success');
                     this.tel = res.tel;
-                    this.transportLists = res.transportLists;
+                    this.transportLists = res.transportList;
                     this.name = res.name;
                     this.addr = res.addr;
                     this.loading = true;
+                }else if(res.status == -1){
+                    //登录失效或未登录
+                    this.$router.replace({
+                        //重定向
+                        name: "login"
+                    });
                 }else{
                     this.showMsgbox(res.msg);
+                    setTimeout(() => {
+                        this.$router.push({
+                            //跳转到payList
+                            name: "payList"
+                        });
+                    },2000);
                 }
             });
         },
@@ -120,6 +138,7 @@
             width: 100%;
             margin-top: 40px;
             position: relative;
+            margin-bottom: 60px;
             li{
                 width: 100%;
                 display: table;

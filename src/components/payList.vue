@@ -17,7 +17,7 @@
                     <img :src="list.home_picture" alt="">
                 </div>
                 <div class="item-right">
-                    <p class="product-name">{{ list.productName }}{{list.orderId}}</p>
+                    <p class="product-name">{{ list.productName }}</p>
                     <p class="price-info">
                         <span class="price" v-if="list.unitPrice > 0 && list.isWheel == 0">￥{{list.unitPrice}}</span>
                         <span class="count" v-if="list.count > 0">&nbsp;&nbsp;x{{list.count}}</span>
@@ -34,6 +34,12 @@
                 </div>
             </li>
         </ul>
+
+        <div class="scrollTrue" v-if="loadmoreBol">
+            <img src="../assets/img/loadMore.gif" alt="">
+            加载中，请稍候
+        </div>
+        <p class="scrollFalse" v-else>{{txt}}</p>
     </div>
 </template>
 
@@ -45,30 +51,36 @@
         },
         data() {
             return {
-                tel: '***',
-                headerImg: '../assets/img/header.png',
-                page: 1,
-                numPerPage: 7,
-                loading: false,
-                lists: [],
-                scroll: true
+                tel: '***',  //手机号码
+                headerImg: '../assets/img/header.png',  //头像图片
+                page: 1,  //显示页数
+                numPerPage: 7,  //每次展示的个数
+                loading: false,  //页面是否加载完毕
+                lists: [],  //物流订单数组
+                scroll: true,   //是否可以加载更多
+                loadmoreBol: false,  //显示加载中还是上拉加载更多 (true：加载中，false：上拉加载更多)
+                txt: '上拉加载更多',  //底部加载文案
+                timer: null   //加载更多延时定时器
             }
         },
         beforeCreate(){
             document.getElementsByTagName("body")[0].setAttribute("style","background-color:#efefef");
         },
         mounted(){
-            let _this = this;
-            this.getData();
+            let _this = this;  //解决this指向问题
+            this.getData();  //获取首页内容
 
             window.addEventListener('scroll',function (){
-                console.log(1111);
-
+                //监听滚动事件
                 _this.handleScroll();
             });
         },
         destroyed(){
             document.getElementsByTagName("body")[0].setAttribute("style","background-color:white");
+            window.removeEventListener('scroll',function (){
+                //关闭此页面时关闭滚动事件的监听
+                _this.handleScroll();
+            });
         },
         methods: {
             showMsgbox(msg){
@@ -86,6 +98,7 @@
                     this.showMsgbox('查询不到记录，请稍后再试');
                 }else{
                     //跳转详情页
+                    sessionStorage.removeItem('orderId');
                     this.$router.push({
                         name: "detailInfo",
                         params: {
@@ -100,9 +113,8 @@
                     numPerPage: this.numPerPage
                 };
                 this.$http.getAxio(process.env.API_HOST+this.$http.urlHead+'Transport/showListAlreadyPay', 'POST', this.$qs.stringify(data)).then(res => {
-                    console.log(res.status)
+
                     if (res.status == 1){
-                        console.log('success');
                         this.tel = res.tel;
                         this.lists = res.data;
                         this.headerImg = res.photoUrl;
@@ -111,6 +123,7 @@
                             this.scroll = false;
                         }
                     }else if (res.status == -1){
+                        //登录失效或未登录
                         this.$router.replace({
                             //重定向
                             name: "login"
@@ -121,52 +134,76 @@
                 });
             },
             handleScroll (){
-                // console.log(222)
-                if(document.documentElement.scrollTop+document.documentElement.clientHeight>= document.documentElement.scrollHeight){
-                    this.page +=1;
-                    this.loadMore();
+                //处理滚动事件函数
+
+                let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+                //触发条件：滚动条距离顶部的距离加可视窗口的高度大于等于页面内容总高度的时候
+                if(scrollTop + document.documentElement.offsetHeight >= document.documentElement.scrollHeight){
+                    //未 全部加载完时
+                    if (this.scroll){
+                        this.loadmoreBol = true;  //显示loading加载中
+                        if (!this.timer){
+                            this.timer = setTimeout(() =>{
+                                this.loadMore();
+                            },700);
+                        }
+                    }else{
+                        this.loadmoreBol = false;
+                    }
+
                 }else{
-                    this.scroll=false;
+                    // this.scroll=false;
+                    // this.loadmoreBol = false;
                 }
 
             },
             loadMore (){
+                //获取更多数据请求
                 let _this = this;
+                _this.page++;
                 let data = {
                     pageNum: _this.page,
                     numPerPage: _this.numPerPage
                 };
-                if (_this.scroll){
-                    _this.$http.getAxio(process.env.API_HOST+_this.$http.urlHead+'Transport/showListAlreadyPay', 'POST', _this.$qs.stringify(data)).then(res => {
-                        console.log(res.status)
-                        if (res.status == 1){
-                            alert(_this.page);
-                            res.data.forEach(function (val,index){
-                                _this.lists.push(val);
-                            });
-                            if (res.data.length < _this.numPerPage){
-                                //数据不够展示一页的
-                                _this.scroll = false;
-                            }else {
-                                _this.scroll = true;
-                            }
-                        }else{
-                            _this.showMsgbox(res.msg);
-                        }
-                    })
-                        .catch(function (error){
-                            console.log(error)
-                        })
-                }
 
+                _this.$http.getAxio(process.env.API_HOST+_this.$http.urlHead+'Transport/showListAlreadyPay', 'POST', _this.$qs.stringify(data)).then(res => {
+
+                    if (res.status == 1){
+
+                        res.data.forEach(function (val,index){
+                            _this.lists.push(val);
+                        });
+                        if (res.data.length < _this.numPerPage){
+                            //数据不够展示一页的
+                            _this.scroll = false;
+                            _this.loadmoreBol = false;
+                            _this.txt = "暂无更多数据";
+
+                        }else {
+                            //还有数据，或者最后的数据刚好{{numPerPage}}个
+                            _this.scroll = true;
+                            _this.loadmoreBol = false;
+                            _this.txt = "上拉加载更多";
+                        }
+                    }else{
+                        // _this.showMsgbox(res.msg);
+                        _this.scroll = false;
+                        _this.loadmoreBol = false;
+                        _this.txt = "上拉加载更多";
+                    }
+                    clearTimeout(_this.timer);
+                    _this.timer = null;
+                })
+                    .catch(function (error){
+                        _this.scroll = false;
+                        console.log(error)
+                    });
             }
         },
         filters: {
             hideMiddle(val) {
                 return `${val.substring(0,3)}****${val.substring(val.length-4)}`
-
             }
-
         }
     }
 </script>
@@ -297,7 +334,27 @@
                 }
             }
         }
-
+        .scrollFalse{
+            width: 100%;
+            padding: 20px 0;
+            margin: 10px 0;
+            font-size: 26px;
+            color: #666;
+        }
+        .scrollTrue{
+            width: 100%;
+            padding: 20px 0;
+            margin: 10px 0;
+            font-size: 26px;
+            color: #666;
+            line-height: 30px;
+            position: relative;
+            img{
+                width: 28px;
+                position: relative;
+                top: 5px;
+            }
+        }
     }
 
 </style>

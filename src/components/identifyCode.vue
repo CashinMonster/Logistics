@@ -7,7 +7,7 @@
         <router-link to="/login">更换手机号</router-link>
         <div id="yzm-wraper">
             <div class="ipt-box-nick mb15-nick">
-                <input type="tel" maxlength="4" oncopy="return false" v-model="code" onpaste="return false" class="ipt-real-nick" @input="inputChange" />
+                <input type="tel" maxlength="4" unselectable="on" oncopy="return false" v-model="code" onpaste="return false" class="ipt-real-nick" @input="inputChange" />
                 <div class="ipts-box-nick">
                     <div class="ipt-fake-box">
                         <div></div>
@@ -55,10 +55,7 @@
                     this.tel = sessionTel;
                     this.countDown();
                 }else{
-                    this.$msgbox({
-                        content: '没有手机号，请前往输入手机号',
-                        className: 'pop-custom'
-                    });
+                    this.showMsgbox("没有手机号，请前往输入手机号");
                 }
             }
         },
@@ -123,31 +120,6 @@
                 }
             },
             countDown(){
-                // let TIME_COUNT = null;
-                // if (sessionStorage.getItem('count')){
-                //     if (sessionStorage.getItem('count') == 0){
-                //         this.resendBol = true;
-                //     }else{
-                //         TIME_COUNT = sessionStorage.getItem('count');
-                //     }
-                // }else{
-                //     TIME_COUNT = 60;
-                // }
-                // if (!this.timer) {
-                //     this.count = TIME_COUNT;
-                //
-                //     this.timer = setInterval(() => {
-                //         if (this.count > 0 && this.count <= 60) {
-                //             this.resendBol = false;
-                //             this.count--;
-                //             sessionStorage.setItem('count',this.count);
-                //         } else {
-                //             this.resendBol = true;
-                //             clearInterval(this.timer);
-                //             this.timer = null;
-                //         }
-                //     }, 1000);
-                // }
 
                 let TIME_COUNT = new Date().getTime();//时间戳
                 if (!localStorage.getItem("TIME_COUNT")){
@@ -223,8 +195,7 @@
     .identify-wraper{
         width: 600px;
         margin-left: 75px;
-        margin-top: 360px;
-        /*border: 1px solid red;*/
+        margin-top: 100px;
         position: relative;
         p{
             font-size: 40px;
@@ -320,6 +291,7 @@
     }
     .ipt-real-nick{
         caret-color: transparent;
+
     }
     .identify-wraper .leftTime{
         position: absolute;

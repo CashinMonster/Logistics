@@ -96,8 +96,7 @@
            });
         },
         judgeSubmit(){
-        //判断是否
-
+        //判断是否可以提交
 
           if (!localStorage.getItem("TIME_COUNT")){
 
@@ -108,9 +107,16 @@
               count = count / 1000; //转换成秒数
               let waitTime = 0;
               if (count < 60){
-                  count = parseInt(count, 10);
-                  waitTime = 60 - count;
-                  this.showMsgbox('请等'+ waitTime +'秒后再试');
+                  // count = parseInt(count, 10);
+                  // waitTime = 60 - count;
+                  // this.showMsgbox('请等'+ waitTime +'秒后再试');
+                  this.$router.replace({
+                      //重定向
+                      name: "identifyCode",
+                      params: {
+                          tel: this.tel
+                      }
+                  });
               }else{
                 this.postPhone();
               }
@@ -148,7 +154,7 @@
   .login-main{
     width: 600px;
     margin-left: 75px;
-    margin-top: 300px;
+    margin-top: 260px;
     /*border: 1px solid red;*/
     position: relative;
   }
@@ -160,14 +166,33 @@
     border-top: 2px solid #eee;
     margin-top: 20px;
   }
+
   .telEntry{
-    caret-color:rgb(241,119,46);
-    width: 400px;
-    height: 60px;
-    font-size: 30px;
-    line-height: 60px;
-    text-align: center;
+      caret-color:rgb(241,119,46) !important;
+      width: 420px;
+      height: 60px;
+      font-size: 40px;
+      letter-spacing: 4px;
+      line-height: 60px;
+      text-align: center;
+      color: rgb(241,119,46);
   }
+  .telEntry::-webkit-input-placeholder {
+      font-size: 30px;
+  }
+  .telEntry::-moz-placeholder{
+      font-size: 30px;
+  }
+  .telEntry:-moz-placeholder{
+      font-size: 30px;
+  }
+  .telEntry::-ms-input-placeholder{
+      font-size: 30px;
+  }
+  .telEntry:-ms-input-placeholder{
+      font-size: 30px;
+  }
+
   .clear{
     width: 40px;
     position: absolute;
