@@ -54,7 +54,7 @@
                 tel: '***',  //手机号码
                 headerImg: '../assets/img/header.png',  //头像图片
                 page: 1,  //显示页数
-                numPerPage: 7,  //每次展示的个数
+                numPerPage: 9,  //每次展示的个数
                 loading: false,  //页面是否加载完毕
                 lists: [],  //物流订单数组
                 scroll: true,   //是否可以加载更多
