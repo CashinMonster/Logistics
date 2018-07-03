@@ -2,9 +2,12 @@
 const utils = require('./utils')
 const config = require('../config')
 const isProduction = process.env.NODE_ENV === 'production'
+// const sourceMapEnabled = isProduction
+//   ? config.build.productionSourceMap
+//   : config.dev.cssSourceMap
 const sourceMapEnabled = isProduction
-  ? config.build.productionSourceMap
-  : config.dev.cssSourceMap
+    ? config.build.productionSourceMap
+    : ((config[process.env.NODE_ENV]&&config[process.env.NODE_ENV]['productionSourceMap'])?config[process.env.NODE_ENV].productionSourceMap:config.dev.cssSourceMap)
 
 module.exports = {
   loaders: utils.cssLoaders({

@@ -15,12 +15,6 @@ Vue.use(VueMeta)
 Vue.config.productionTip = false
 Vue.prototype.$qs = qs
 
-Vue.directive('title', {
-    inserted: function (el, binding) {
-        document.title = el.dataset.title
-    }
-})
-
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

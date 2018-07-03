@@ -32,7 +32,7 @@ module.exports = {
     },
 
     // Various Dev Server settings
-    host: '192.168.1.57', // can be overwritten by process.env.HOST
+    host: '192.168.1.38', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
@@ -84,5 +84,35 @@ module.exports = {
     // `npm run build --report`
     // Set to `true` or `false` to always turn it on or off
     bundleAnalyzerReport: process.env.npm_config_report
-  }
+  },
+    test: {
+        // Template for index.html
+        index: path.resolve(__dirname, '../test/index.html'),
+
+        // Paths
+        assetsRoot: path.resolve(__dirname, '../test'),
+        assetsSubDirectory: 'static',
+        assetsPublicPath: './',  //服务器
+        // assetsPublicPath: '/',  //本地
+        /**
+         * Source Maps
+         */
+
+        productionSourceMap: true,
+        // https://webpack.js.org/configuration/devtool/#production
+        devtool: '#source-map',
+
+        // Gzip off by default as many popular static hosts such as
+        // Surge or Netlify already gzip all static assets for you.
+        // Before setting to `true`, make sure to:
+        // npm install --save-dev compression-webpack-plugin
+        productionGzip: false,
+        productionGzipExtensions: ['js', 'css'],
+
+        // Run the build command with an extra argument to
+        // View the bundle analyzer report after build finishes:
+        // `npm run build --report`
+        // Set to `true` or `false` to always turn it on or off
+        bundleAnalyzerReport: process.env.npm_config_report
+    }
 }

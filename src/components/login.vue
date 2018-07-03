@@ -27,12 +27,6 @@
           TIME_COUNT: 0
       }
     },
-      // beforeCreate(){
-      //     document.title = "登录";
-      // },
-      // destroyed(){
-      //     document.title = ""
-      // },
     methods: {
         showMsgbox(msg){
             //弹框函数
