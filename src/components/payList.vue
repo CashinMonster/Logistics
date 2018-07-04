@@ -218,7 +218,7 @@
     .payList-wraper{
         width: 96%;
         position: absolute;
-        margin-top: 60px;
+        margin-top: 35px;
         left: 2%;
         .changeTel{
             color: rgb(241,119,46);
@@ -261,7 +261,7 @@
             font-size: 30px;
         }
         .all-lists{
-            margin-top: 20px;
+            margin-top: 35px;
             .list-item{
                 width: 100%;
                 display: table;
