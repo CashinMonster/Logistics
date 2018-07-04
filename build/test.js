@@ -11,7 +11,7 @@ const webpack = require('webpack')
 const config = require('../config')
 const webpackConfig = require('./webpack.test.conf')
 
-const spinner = ora('building for production...')
+const spinner = ora('building for test...')
 spinner.start()
 
 rm(path.join(config.test.assetsRoot, config.test.assetsSubDirectory), err => {

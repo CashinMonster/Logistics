@@ -87,6 +87,7 @@ module.exports = {
   },
     test: {
         // Template for index.html
+        env: require('./test.env'),
         index: path.resolve(__dirname, '../test/index.html'),
 
         // Paths

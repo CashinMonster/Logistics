@@ -20,7 +20,7 @@
                     <p class="product-name">{{ list.productName }}</p>
                     <p class="price-info">
                         <span class="price" v-if="list.unitPrice > 0 && list.isWheel == 0">￥{{list.unitPrice}}</span>
-                        <span class="count" v-if="list.count > 0">&nbsp;&nbsp;x{{list.count}}</span>
+                        <span class="count" v-if="list.isWheel == 0">&nbsp;&nbsp;x{{list.count}}</span>
                         <span class="total" v-if="list.isWheel == 0">
                             ￥<a href="javascript:void(0);">{{list.price}}</a>
                         </span>
