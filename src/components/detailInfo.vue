@@ -25,6 +25,7 @@
                 </div>
             </li>
         </ul>
+        <div class="empty"></div>
     </div>
 </template>
 
@@ -138,7 +139,6 @@
             width: 100%;
             margin-top: 40px;
             position: relative;
-            margin-bottom: 60px;
             li{
                 width: 100%;
                 display: table;
@@ -194,6 +194,10 @@
                     }
                 }
             }
+        }
+        .empty{
+            width: 100px;
+            height: 60px;
         }
     }
 </style>

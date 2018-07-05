@@ -1,20 +1,20 @@
 
 <template>
-    <div class="payList-wraper" ref="wraper" v-if="loading">
-        <router-link to="/login" class="header-link">
+    <div class="payList-wraper" ref="wraper">
+        <router-link to="/login" class="header-link" v-if="lists != ''">
             <div class="header">
                 <img :src="headerImg" alt="">
             </div>
             <span class="tel">{{ tel | hideMiddle }}</span>
         </router-link>
-        <router-link to="/login" class="changeTel">更换手机号</router-link>
+        <router-link to="/login" class="changeTel" v-if="lists != ''">更换手机号</router-link>
         <p v-if="lists == ''" class="list-empty">
             无物流记录
         </p>
         <ul class="all-lists" v-else>
             <li class="list-item" v-for="list in lists" :data-id="list.orderId" :data-status="list.status" @click="toDetail($event,list.orderId,list.status)">
                 <div class="item-left">
-                    <img :src="getResServerUrl(list.home_picture)" :onerror="defaultImg" alt="">
+                    <img v-lazy="getResServerUrl(list.home_picture)" :onerror="defaultImg" alt="">
                 </div>
                 <div class="item-right">
                     <p class="product-name">{{ list.productName }}</p>
@@ -39,7 +39,7 @@
             <img src="../assets/img/loadMore.gif" alt="">
             加载中，请稍候
         </div>
-        <p class="scrollFalse" v-else>{{txt}}</p>
+        <p class="scrollFalse" v-if="lists != ''" v-else>{{txt}}</p>
     </div>
 </template>
 
@@ -52,7 +52,7 @@
         data() {
             return {
                 tel: '***',  //手机号码
-                headerImg: '../assets/img/header.png',  //头像图片
+                headerImg: '',  //头像图片
                 defaultImg: 'this.src="' + require('../assets/img/miss.png') + '"', //图片出错时的默认图片
                 page: 1,  //显示页数
                 numPerPage: 9,  //每次展示的个数
@@ -75,6 +75,7 @@
                 //监听滚动事件
                 _this.handleScroll();
             });
+
         },
         destroyed(){
             document.getElementsByTagName("body")[0].setAttribute("style","background-color:white");
@@ -92,7 +93,7 @@
                 });
             },
             toDetail (e,id,status){
-            //  id为orderId
+                //  id为orderId
                 if(status == -1 || status == 1){
                     this.showMsgbox('待发货，快递小哥正在准备中');
                 }else if (status == 0){
@@ -128,6 +129,7 @@
                         this.loading = true;
                         if (res.data.length < this.numPerPage){
                             this.scroll = false;
+                            this.txt = "暂无更多数据";
                         }
                     }else if (res.status == -1){
                         //登录失效或未登录

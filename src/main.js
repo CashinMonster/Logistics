@@ -8,6 +8,11 @@ import 'lib-flexible'  //移动端适配（直接用px为单位就行，基于�
 import qs from 'qs'  //qs 解决post请求后端接收不到的问题
 import emComponent from './plugin/popUp/index'  //自定义的弹框插件
 import VueMeta from 'vue-meta'  //优雅的修改meta
+import VueLazyLoad from 'vue-lazyload'
+Vue.use(VueLazyLoad,{
+    error:'./static/img/miss.png',
+    loading:'./static/img/miss.png'
+})
 
 Vue.use(emComponent)
 Vue.use(VueMeta)
