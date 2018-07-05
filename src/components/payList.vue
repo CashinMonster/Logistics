@@ -14,7 +14,7 @@
         <ul class="all-lists" v-else>
             <li class="list-item" v-for="list in lists" :data-id="list.orderId" :data-status="list.status" @click="toDetail($event,list.orderId,list.status)">
                 <div class="item-left">
-                    <img :src="list.home_picture" alt="">
+                    <img :src="getResServerUrl(list.home_picture)" :onerror="defaultImg" alt="">
                 </div>
                 <div class="item-right">
                     <p class="product-name">{{ list.productName }}</p>
@@ -53,6 +53,7 @@
             return {
                 tel: '***',  //手机号码
                 headerImg: '../assets/img/header.png',  //头像图片
+                defaultImg: 'this.src="' + require('../assets/img/miss.png') + '"', //图片出错时的默认图片
                 page: 1,  //显示页数
                 numPerPage: 9,  //每次展示的个数
                 loading: false,  //页面是否加载完毕
@@ -96,6 +97,9 @@
                     this.showMsgbox('待发货，快递小哥正在准备中');
                 }else if (status == 0){
                     this.showMsgbox('查询不到记录，请稍后再试');
+                }else if (status == 99){
+                    //订单首次查询接口失败
+                    this.showMsgbox('订单正在查询，请稍后再试');
                 }else{
                     //跳转详情页
                     sessionStorage.removeItem('orderId');
@@ -106,6 +110,9 @@
                         }
                     });
                 }
+            },
+            getResServerUrl(url) {
+                return process.env.RESOURCE_HOST+url;
             },
             getData (){
                 let data = {
