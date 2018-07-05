@@ -39,7 +39,7 @@
             <img src="../assets/img/loadMore.gif" alt="">
             加载中，请稍候
         </div>
-        <p class="scrollFalse" v-if="lists != ''" v-else>{{txt}}</p>
+        <p class="scrollFalse" v-if="lists != '' && !loadmoreBol">{{txt}}</p>
     </div>
 </template>
 
