@@ -1,15 +1,21 @@
 
 <template>
     <div class="payList-wraper" ref="wraper">
-        <router-link to="/login" class="header-link" v-if="lists != ''">
+        <router-link to="/login" class="header-link" v-if="tel != ''">
             <div class="header">
                 <img :src="headerImg" alt="">
             </div>
             <span class="tel">{{ tel | hideMiddle }}</span>
         </router-link>
-        <router-link to="/login" class="changeTel" v-if="lists != ''">更换手机号</router-link>
+        <router-link to="/login" class="changeTel" v-if="tel != ''">更换手机号</router-link>
         <p v-if="lists == ''" class="list-empty">
-            无物流记录
+            <span v-if="tel == ''">
+                加载中...
+            </span>
+            <span v-else>
+                无物流记录
+            </span>
+
         </p>
         <ul class="all-lists" v-else>
             <li class="list-item" v-for="list in lists" :data-id="list.orderId" :data-status="list.status" @click="toDetail($event,list.orderId,list.status)">
@@ -35,7 +41,7 @@
             </li>
         </ul>
 
-        <div class="scrollTrue" v-if="loadmoreBol">
+        <div class="scrollTrue" v-if="loadmoreBol && lists != ''">
             <img src="../assets/img/loadMore.gif" alt="">
             加载中，请稍候
         </div>
@@ -51,7 +57,7 @@
         },
         data() {
             return {
-                tel: '***',  //手机号码
+                tel: '',  //手机号码
                 headerImg: '',  //头像图片
                 defaultImg: 'this.src="' + require('../assets/img/miss.png') + '"', //图片出错时的默认图片
                 page: 1,  //显示页数
